@@ -32,7 +32,7 @@ public class Run {
         sol.init();
 
         int t = 0;
-        double dt = 60 * 60;
+        double dt = 60;
         sol.leapfrogFirstStep(dt);
         do {
 

@@ -55,7 +55,7 @@ public class Sol extends StarSystem {
         for (Body body : getBodies()) {
 
             // delete existing data files
-            new File(body.getName() + ".dat").delete();
+            new File("output/" + body.getName() + ".dat").delete();
 
             if (body instanceof Sun) {
 
@@ -78,8 +78,6 @@ public class Sol extends StarSystem {
                 body.setVel(new double[]{0, 0, -24.077e3});
 
             }
-
-            body.applyChanges();
 
         }
 

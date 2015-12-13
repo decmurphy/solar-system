@@ -39,34 +39,24 @@ public abstract class Body {
     private final double mass;
     private double energy;
 
-    private final double[] tempPos;
-    private final double[] tempVel;
-
     public Body(double radius, double mass) {
         this.pos = new double[3];
         this.vel = new double[3];
         this.accel = new double[3];
         this.radius = radius;
         this.mass = mass;
-        this.tempPos = new double[3];
-        this.tempVel = new double[3];
     }
 
     public final void setPos(double[] pos) {
-        System.arraycopy(pos, 0, this.tempPos, 0, pos.length);
+        System.arraycopy(pos, 0, this.pos, 0, pos.length);
     }
 
     public final void setVel(double[] vel) {
-        System.arraycopy(vel, 0, this.tempVel, 0, vel.length);
+        System.arraycopy(vel, 0, this.vel, 0, vel.length);
     }
 
     public final void setAccel(double[] accel) {
         System.arraycopy(accel, 0, this.accel, 0, accel.length);
-    }
-
-    public final void applyChanges() {
-        System.arraycopy(tempPos, 0, pos, 0, pos.length);
-        System.arraycopy(tempVel, 0, vel, 0, vel.length);
     }
 
     public final void setEnergy(double e) {
