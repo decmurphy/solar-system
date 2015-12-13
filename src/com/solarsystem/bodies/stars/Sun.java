@@ -11,10 +11,10 @@ import com.solarsystem.bodies.Body;
  *
  * @author declan
  */
-public class Sol extends Body {
+public class Sun extends Body {
     
-    private static final Sol singleton = new Sol(696342e3, 1.98855e30);
-    private Sol(double radius, double mass) {
+    private static final Sun singleton = new Sun(696342e3, 1.98855e30);
+    private Sun(double radius, double mass) {
         super(radius, mass);
     }
     
@@ -24,7 +24,7 @@ public class Sol extends Body {
     
     @Override
     public String getName() {
-        return "Sol";
+        return "Sun";
     }
     
 }
