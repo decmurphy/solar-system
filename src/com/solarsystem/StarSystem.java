@@ -62,75 +62,61 @@ public abstract class StarSystem {
     public abstract String getName();
 
     public void leapfrogFirstStep(double dt) {
-        
-        updateAcceleration();
-        
-        for (Body body : bodies) {
 
-            double[] vel = new double[3];
-            System.arraycopy(body.getVel(), 0, vel, 0, 3);
-            vel[0] += body.getAccel()[0] * dt / 2;
-            vel[2] += body.getAccel()[2] * dt / 2;
-            body.setVel(vel);
+        updateAcceleration();
+
+        for (Body body : bodies) {
+            body.getVel()[0] += body.getAccel()[0] * dt / 2;
+            body.getVel()[2] += body.getAccel()[2] * dt / 2;
         }
     }
 
     public void leapfrog(double dt) {
 
-        double[] pos = new double[3];
         for (Body body : bodies) {
-            
-            System.arraycopy(body.getPos(), 0, pos, 0, 3);
-            pos[0] += body.getVel()[0] * dt;
-            pos[2] += body.getVel()[2] * dt;
-            body.setPos(pos);
-            
+
+            body.getPos()[0] += body.getVel()[0] * dt;
+            body.getPos()[2] += body.getVel()[2] * dt;
+
             // set accels to zero again
             System.arraycopy(new double[3], 0, body.getAccel(), 0, 3);
         }
-        
+
         updateAcceleration();
 
-        double[] vel = new double[3];
         for (Body body : bodies) {
-            
-            System.arraycopy(body.getVel(), 0, vel, 0, 3);
-            vel[0] += body.getAccel()[0] * dt;
-            vel[2] += body.getAccel()[2] * dt;
-            body.setVel(vel);
+            body.getVel()[0] += body.getAccel()[0] * dt;
+            body.getVel()[2] += body.getAccel()[2] * dt;
         }
 
     }
-    
+
     private void updateAcceleration() {
-                
-        double[] accel1 = new double[3];
+
         for (int i = 0; i < bodies.size(); i++) {
 
             Body body = bodies.get(i);
-            
-            System.arraycopy(body.getAccel(), 0, accel1, 0, 3);
             for (int j = i + 1; j < bodies.size(); j++) {
 
                 Body otherBody = bodies.get(j);
 
-                double psi = atan2(otherBody.getPos()[2] - body.getPos()[2], otherBody.getPos()[0] - body.getPos()[0]);
-                double R_sq = pow(body.getPos()[0] - otherBody.getPos()[0], 2) + pow(body.getPos()[2] - otherBody.getPos()[2], 2);
+                double Rx = otherBody.getPos()[0] - body.getPos()[0];
+                double Rz = otherBody.getPos()[2] - body.getPos()[2];
+                double psi = atan2(Rz, Rx);
+                double R_sq = Rx*Rx + Rz*Rz;
+                
                 double A = G * otherBody.getMass() / R_sq;
 
-                accel1[0] += A * cos(psi);
-                accel1[2] += A * sin(psi);
+                body.getAccel()[0] += A * cos(psi);
+                body.getAccel()[2] += A * sin(psi);
 
                 A *= body.getMass() / otherBody.getMass();
 
-                double[] accel2 = new double[3];
-                System.arraycopy(otherBody.getAccel(), 0, accel2, 0, 3);
-                accel2[0] -= A * cos(psi);
-                accel2[2] -= A * sin(psi);
-                otherBody.setAccel(accel2);
+                otherBody.getAccel()[0] -= A * cos(psi);
+                otherBody.getAccel()[2] -= A * sin(psi);
 
             }
-            body.setAccel(accel1);
+
         }
     }
 
