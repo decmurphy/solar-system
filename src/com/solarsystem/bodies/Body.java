@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ This file is part of FlightClub.
+
+ Copyright © 2014-2015 Declan Murphy
+
+ FlightClub is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ FlightClub is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.solarsystem.bodies;
 
@@ -18,17 +31,17 @@ import static java.lang.Math.sin;
  * @author declan
  */
 public abstract class Body {
-    
+
     private final double[] pos;
     private final double[] vel;
     private final double[] accel;
     private final double radius;
     private final double mass;
     private double energy;
-    
+
     private final double[] tempPos;
     private final double[] tempVel;
-    
+
     public Body(double radius, double mass) {
         this.pos = new double[3];
         this.vel = new double[3];
@@ -50,12 +63,12 @@ public abstract class Body {
     public final void setAccel(double[] accel) {
         System.arraycopy(accel, 0, this.accel, 0, accel.length);
     }
-    
+
     public final void applyChanges() {
         System.arraycopy(tempPos, 0, pos, 0, pos.length);
-        System.arraycopy(tempVel, 0, vel, 0, vel.length);        
+        System.arraycopy(tempVel, 0, vel, 0, vel.length);
     }
-    
+
     public final void setEnergy(double e) {
         this.energy = e;
     }
@@ -63,27 +76,31 @@ public abstract class Body {
     public final double[] getPos() {
         return pos;
     }
+
     public final double[] getVel() {
         return vel;
     }
+
     public final double[] getAccel() {
         return accel;
     }
+
     public final double getRadius() {
         return radius;
     }
+
     public final double getMass() {
         return mass;
     }
+
     public final double getEnergy() {
         return energy;
     }
-    
+
     public abstract String getName();
-    
-    public final void draw() throws IOException
-    {
-        File outputFile = new File("/" + getName() + ".output.txt");        
+
+    public final void draw() throws IOException {
+        File outputFile = new File("/" + getName() + ".output.txt");
         PrintWriter pw = new PrintWriter(new FileWriter(outputFile, false));
         double x, y, z;
         double theta, psi, dt = PI / 36, dp = PI / 36;
@@ -94,7 +111,7 @@ public abstract class Body {
                 x = radius * sin(theta) * cos(psi);
                 y = radius * sin(theta) * sin(psi);
 
-                pw.print((pos[0]+x)*1e-3 + "\t" + (pos[1]+y)*1e-3 + "\t" + (pos[2]+z)*1e-3 + "\n");
+                pw.print((pos[0] + x) * 1e-3 + "\t" + (pos[1] + y) * 1e-3 + "\t" + (pos[2] + z) * 1e-3 + "\n");
             }
             pw.print("\n");
         }

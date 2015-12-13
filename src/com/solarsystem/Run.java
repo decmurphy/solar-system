@@ -1,27 +1,22 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ This file is part of FlightClub.
+
+ Copyright © 2014-2015 Declan Murphy
+
+ FlightClub is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ FlightClub is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.solarsystem;
-
-import com.solarsystem.bodies.Body;
-import com.solarsystem.bodies.planets.Earth;
-import com.solarsystem.bodies.planets.Mars;
-import com.solarsystem.bodies.planets.Moon;
-import com.solarsystem.bodies.stars.Sun;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import static java.lang.Math.PI;
-import static java.lang.Math.atan2;
-import static java.lang.Math.cos;
-import static java.lang.Math.pow;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -30,19 +25,21 @@ import java.util.List;
 public class Run {
 
     static double G = 6.67384e-11;
+
     public static void main(String[] args) {
 
         StarSystem sol = Sol.get();
         sol.init();
 
         int t = 0;
-        double dt = 60*60;
+        double dt = 60 * 60;
         sol.leapfrogFirstStep(dt);
         do {
 
             sol.leapfrog(dt);
-            if(t%(60*60*12)==0)
+            if (t % (60 * 60 * 12) == 0) {
                 sol.output();
+            }
 
             t += dt;
 

@@ -25,16 +25,17 @@ import com.solarsystem.bodies.Body;
  * @author declan
  */
 public final class Moon extends Body {
-    
-    public static final Body singleton = new Moon(1737100, 7.342e22); 
+
+    public static final Body singleton = new Moon(1737100, 7.342e22);
+
     private Moon(double radius, double mass) {
         super(radius, mass);
     }
-    
+
     public static Body get() {
         return singleton;
     }
-    
+
     @Override
     public String getName() {
         return "Moon";

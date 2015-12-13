@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ This file is part of FlightClub.
+
+ Copyright © 2014-2015 Declan Murphy
+
+ FlightClub is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ FlightClub is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.solarsystem;
 
@@ -17,29 +30,30 @@ import java.io.File;
  * @author declan
  */
 public class Sol extends StarSystem {
-    
+
     private static final StarSystem singleton = new Sol();
+
     public static StarSystem get() {
         return singleton;
     }
-    
+
     private Sol() {
         addBody(Sun.get());
         addBody(Earth.get());
         addBody(Moon.get());
         addBody(Mars.get());
     }
-    
+
     @Override
     public String getName() {
         return "Sol";
     }
-    
+
     @Override
     public void init() {
 
         for (Body body : getBodies()) {
-            
+
             // delete existing data files
             new File(body.getName() + ".dat").delete();
 
@@ -70,6 +84,5 @@ public class Sol extends StarSystem {
         }
 
     }
-    
-    
+
 }

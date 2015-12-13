@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ This file is part of FlightClub.
+
+ Copyright © 2014-2015 Declan Murphy
+
+ FlightClub is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ FlightClub is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.solarsystem;
 
@@ -25,41 +38,45 @@ import java.util.List;
  * @author declan
  */
 public abstract class StarSystem {
-    
+
     private final List<Body> bodies;
+
     public StarSystem() {
         this.bodies = new ArrayList();
     }
-    
+
     public final List<Body> getBodies() {
         return bodies;
     }
-    
+
     public final void addBody(Body b) {
-        if(!bodies.contains(b))
+        if (!bodies.contains(b)) {
             bodies.add(b);
+        }
     }
+
     public final void removeBody(Body b) {
         bodies.remove(b);
     }
-    
+
     public abstract void init();
+
     public abstract String getName();
-    
+
     public void leapfrogFirstStep(double dt) {
-        
-        for (int i=0;i<bodies.size();i++) {
-            
+
+        for (int i = 0; i < bodies.size(); i++) {
+
             Body body = bodies.get(i);
 
             double[] accel1 = new double[3];
             double[] pos = new double[3];
 
             System.arraycopy(body.getPos(), 0, pos, 0, 3);
-            for (int j=i+1;j<bodies.size();j++) {
-                
+            for (int j = i + 1; j < bodies.size(); j++) {
+
                 Body otherBody = bodies.get(j);
-                
+
                 double[] accel2 = new double[3];
                 System.arraycopy(otherBody.getAccel(), 0, accel2, 0, 3);
 
@@ -68,7 +85,7 @@ public abstract class StarSystem {
                 }
 
                 // get angles betwee bodies
-                double theta = PI/2.0;
+                double theta = PI / 2.0;
                 double psi = atan2(
                         otherBody.getPos()[2] - body.getPos()[2],
                         otherBody.getPos()[0] - body.getPos()[0]
@@ -86,7 +103,7 @@ public abstract class StarSystem {
                 accel1[1] += A * cos(theta);
                 accel1[2] += A * sin(theta) * sin(psi);
 
-                A *= body.getMass()/otherBody.getMass();
+                A *= body.getMass() / otherBody.getMass();
                 accel2[0] -= A * sin(theta) * cos(psi);
                 accel2[1] -= A * cos(theta);
                 accel2[2] -= A * sin(theta) * sin(psi);
@@ -105,15 +122,16 @@ public abstract class StarSystem {
             body.applyChanges();
         }
     }
+
     public void leapfrog(double dt) {
-        
+
         // set accels to zero again
         for (Body body : bodies) {
-            System.arraycopy(new double[3], 0, body.getAccel(), 0, 3);            
+            System.arraycopy(new double[3], 0, body.getAccel(), 0, 3);
         }
-        
-        for (int i=0;i<bodies.size();i++) {
-            
+
+        for (int i = 0; i < bodies.size(); i++) {
+
             Body body = bodies.get(i);
 
             double[] pos = new double[3];
@@ -123,15 +141,15 @@ public abstract class StarSystem {
             System.arraycopy(body.getVel(), 0, vel, 0, 3);
             System.arraycopy(body.getAccel(), 0, accel1, 0, 3);
 
-            for (int j=i+1;j<bodies.size();j++) {
-                
+            for (int j = i + 1; j < bodies.size(); j++) {
+
                 Body otherBody = bodies.get(j);
-                
+
                 double[] accel2 = new double[3];
                 System.arraycopy(otherBody.getAccel(), 0, accel2, 0, 3);
 
                 // get angles between bodies
-                double theta = PI/2.0;
+                double theta = PI / 2.0;
                 double psi = atan2(
                         otherBody.getPos()[2] - body.getPos()[2],
                         otherBody.getPos()[0] - body.getPos()[0]
@@ -148,13 +166,13 @@ public abstract class StarSystem {
                 accel1[1] += A * cos(theta);
                 accel1[2] += A * sin(theta) * sin(psi);
 
-                A *= body.getMass()/otherBody.getMass();
+                A *= body.getMass() / otherBody.getMass();
                 accel2[0] -= A * sin(theta) * cos(psi);
                 accel2[1] -= A * cos(theta);
                 accel2[2] -= A * sin(theta) * sin(psi);
                 otherBody.setAccel(accel2);
             }
-            
+
             vel[0] += accel1[0] * dt;
             vel[1] += accel1[1] * dt;
             vel[2] += accel1[2] * dt;
@@ -165,16 +183,16 @@ public abstract class StarSystem {
 
             body.setPos(pos);
             body.setVel(vel);
-            
+
         }
         for (Body body : bodies) {
             body.applyChanges();
         }
 
     }
-    
+
     public void output() {
-    
+
         for (Body body : bodies) {
 
             PrintWriter pw = null;
@@ -184,7 +202,6 @@ public abstract class StarSystem {
 
                 pw = new PrintWriter(new FileWriter(outputFile, true));
                 pw.printf("%9.3f\t%9.3f\t%9.3f\n", body.getPos()[0], body.getPos()[1], body.getPos()[2]);
-
 
             } catch (IOException e) {
                 int x = 5;
@@ -196,5 +213,5 @@ public abstract class StarSystem {
 
         }
     }
-    
+
 }

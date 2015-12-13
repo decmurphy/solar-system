@@ -34,23 +34,23 @@ import static java.lang.Math.toRadians;
  * @author declan
  */
 public final class Earth extends Body {
-    
-    public static final Body singleton = new Earth(6378137, 5.972e24); 
+
+    public static final Body singleton = new Earth(6378137, 5.972e24);
+
     private Earth(double radius, double mass) {
         super(radius, mass);
     }
-    
+
     public static Body get() {
         return singleton;
     }
-    
+
     @Override
     public String getName() {
         return "Earth";
     }
 
-    public void drawHazardMap(File inputFile, File outputFile) throws IOException 
-    {
+    public void drawHazardMap(File inputFile, File outputFile) throws IOException {
         PrintWriter pw = null;
         BufferedReader br;
 
