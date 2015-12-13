@@ -22,7 +22,7 @@ package com.solarsystem;
  *
  * @author declan
  */
-public class Run {
+public class Main {
 
     static double G = 6.67384e-11;
 

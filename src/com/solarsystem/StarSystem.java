@@ -18,7 +18,7 @@
  */
 package com.solarsystem;
 
-import static com.solarsystem.Run.G;
+import static com.solarsystem.Main.G;
 import com.solarsystem.bodies.Body;
 import java.io.File;
 import java.io.FileWriter;
