@@ -48,13 +48,20 @@ public abstract class StarSystem {
     
     public void leapfrogFirstStep(double dt) {
         
-        for (Body body : bodies) {
+        for (int i=0;i<bodies.size();i++) {
+            
+            Body body = bodies.get(i);
 
-            double[] accel = new double[3];
+            double[] accel1 = new double[3];
             double[] pos = new double[3];
 
             System.arraycopy(body.getPos(), 0, pos, 0, 3);
-            for (Body otherBody : bodies) {
+            for (int j=i+1;j<bodies.size();j++) {
+                
+                Body otherBody = bodies.get(j);
+                
+                double[] accel2 = new double[3];
+                System.arraycopy(otherBody.getAccel(), 0, accel2, 0, 3);
 
                 if (otherBody.equals(body)) {
                     continue;
@@ -75,15 +82,21 @@ public abstract class StarSystem {
                 double A = G * otherBody.getMass() / pow(X, 2);
 
                 // break down accel
-                accel[0] += A * sin(theta) * cos(psi);
-                accel[1] += A * cos(theta);
-                accel[2] += A * sin(theta) * sin(psi);
+                accel1[0] += A * sin(theta) * cos(psi);
+                accel1[1] += A * cos(theta);
+                accel1[2] += A * sin(theta) * sin(psi);
+
+                A *= body.getMass()/otherBody.getMass();
+                accel2[0] -= A * sin(theta) * cos(psi);
+                accel2[1] -= A * cos(theta);
+                accel2[2] -= A * sin(theta) * sin(psi);
+                otherBody.setAccel(accel2);
 
             }
 
-            pos[0] += body.getVel()[0] * dt / 2 + accel[0] * dt * dt / 4;
-            pos[1] += body.getVel()[1] * dt / 2 + accel[1] * dt * dt / 4;
-            pos[2] += body.getVel()[2] * dt / 2 + accel[2] * dt * dt / 4;
+            pos[0] += body.getVel()[0] * dt / 2 + accel1[0] * dt * dt / 4;
+            pos[1] += body.getVel()[1] * dt / 2 + accel1[1] * dt * dt / 4;
+            pos[2] += body.getVel()[2] * dt / 2 + accel1[2] * dt * dt / 4;
 
             body.setPos(pos);
 
@@ -113,9 +126,9 @@ public abstract class StarSystem {
             for (int j=i+1;j<bodies.size();j++) {
                 
                 Body otherBody = bodies.get(j);
+                
                 double[] accel2 = new double[3];
                 System.arraycopy(otherBody.getAccel(), 0, accel2, 0, 3);
-                System.arraycopy(body.getAccel(), 0, accel1, 0, 3);
 
                 // get angles between bodies
                 double theta = PI/2.0;
@@ -134,7 +147,6 @@ public abstract class StarSystem {
                 accel1[0] += A * sin(theta) * cos(psi);
                 accel1[1] += A * cos(theta);
                 accel1[2] += A * sin(theta) * sin(psi);
-                body.setAccel(accel1);
 
                 A *= body.getMass()/otherBody.getMass();
                 accel2[0] -= A * sin(theta) * cos(psi);
@@ -142,7 +154,7 @@ public abstract class StarSystem {
                 accel2[2] -= A * sin(theta) * sin(psi);
                 otherBody.setAccel(accel2);
             }
-
+            
             vel[0] += accel1[0] * dt;
             vel[1] += accel1[1] * dt;
             vel[2] += accel1[2] * dt;
@@ -167,7 +179,7 @@ public abstract class StarSystem {
 
             PrintWriter pw = null;
             try {
-                String fileName = body.getName() + ".dat";
+                String fileName = "output/" + body.getName() + ".dat";
                 File outputFile = new File(fileName);
 
                 pw = new PrintWriter(new FileWriter(outputFile, true));
