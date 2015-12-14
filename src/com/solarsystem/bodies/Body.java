@@ -36,6 +36,7 @@ public abstract class Body {
     private final double[] pos;
     private final double[] vel;
     private final double[] accel;
+    private final double[] rgb;
     private final double radius;
     private final double mass;
     private double energy;
@@ -44,6 +45,7 @@ public abstract class Body {
         this.pos = new double[3];
         this.vel = new double[3];
         this.accel = new double[3];
+        this.rgb = new double[3];
         this.radius = radius;
         this.mass = mass;
     }
@@ -78,6 +80,10 @@ public abstract class Body {
     public final void setEnergy(double e) {
         this.energy = e;
     }
+    
+    public final void setRgb(double[] rgb) {
+        System.arraycopy(rgb, 0, this.rgb, 0, rgb.length);
+    }
 
     public final double[] getPos() {
         return pos;
@@ -101,6 +107,10 @@ public abstract class Body {
 
     public final double getEnergy() {
         return energy;
+    }
+    
+    public final double[] getRgb() {
+        return rgb;
     }
 
     public abstract String getName();
