@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
-import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,18 +92,51 @@ public abstract class StarSystem {
 
     private void updateAcceleration() {
 
-        for (int i = 0; i < bodies.size(); i++) {
+        Body star = null;
+        // The star in the system interacts with all bodies
+        for (Body body : bodies) {
 
-            Body body = bodies.get(i);
-            for (int j = i + 1; j < bodies.size(); j++) {
+            // Find the star and set accelerations for all bodies
+            if (body.isOrbiting(null)) {
+                star = body;
+                for (Body otherBody : bodies) {
 
-                Body otherBody = bodies.get(j);
+                    if (body.equals(otherBody)) {
+                        continue;
+                    }
+
+                    double Rx = otherBody.getPos()[0] - body.getPos()[0];
+                    double Rz = otherBody.getPos()[2] - body.getPos()[2];
+                    double psi = atan2(Rz, Rx);
+                    double R_sq = Rx * Rx + Rz * Rz;
+
+                    double A = G * otherBody.getMass() / R_sq;
+
+                    body.getAccel()[0] += A * cos(psi);
+                    body.getAccel()[2] += A * sin(psi);
+
+                    A *= body.getMass() / otherBody.getMass();
+
+                    otherBody.getAccel()[0] -= A * cos(psi);
+                    otherBody.getAccel()[2] -= A * sin(psi);
+                }
+                break;
+            }
+
+        }
+        // All other bodies only interact with their parent.
+        // If their parent is the star, this has already been done
+        for (Body body : bodies) {
+
+            if (!body.equals(star) && !body.isOrbiting(star)) {
+
+                Body otherBody = body.getParent();
 
                 double Rx = otherBody.getPos()[0] - body.getPos()[0];
                 double Rz = otherBody.getPos()[2] - body.getPos()[2];
                 double psi = atan2(Rz, Rx);
-                double R_sq = Rx*Rx + Rz*Rz;
-                
+                double R_sq = Rx * Rx + Rz * Rz;
+
                 double A = G * otherBody.getMass() / R_sq;
 
                 body.getAccel()[0] += A * cos(psi);
@@ -116,7 +148,6 @@ public abstract class StarSystem {
                 otherBody.getAccel()[2] -= A * sin(psi);
 
             }
-
         }
     }
 

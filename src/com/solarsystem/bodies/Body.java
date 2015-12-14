@@ -32,6 +32,7 @@ import static java.lang.Math.sin;
  */
 public abstract class Body {
 
+    private Body parent;
     private final double[] pos;
     private final double[] vel;
     private final double[] accel;
@@ -45,6 +46,21 @@ public abstract class Body {
         this.accel = new double[3];
         this.radius = radius;
         this.mass = mass;
+    }
+
+    public final void setOrbiting(Body parent) {
+        this.parent = parent;
+    }
+
+    public final boolean isOrbiting(Body body) {
+        if (parent == null) {
+            return body == null;
+        }
+        return parent.equals(body);
+    }
+
+    public Body getParent() {
+        return parent;
     }
 
     public final void setPos(double[] pos) {

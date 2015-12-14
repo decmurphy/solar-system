@@ -35,7 +35,7 @@ import static java.lang.Math.toRadians;
  */
 public final class Earth extends Body {
 
-    public static final Body singleton = new Earth(6378137, 5.972e24);
+    private static final Body singleton = new Earth(6378137, 5.972e24);
 
     private Earth(double radius, double mass) {
         super(radius, mass);
