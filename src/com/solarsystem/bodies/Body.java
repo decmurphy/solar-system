@@ -18,7 +18,7 @@
  */
 package com.solarsystem.bodies;
 
-import static com.solarsystem.utils.getVelocityAtDistance;
+import static com.solarsystem.utils.Astrodynamics.getVelocityAtDistance;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

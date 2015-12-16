@@ -27,8 +27,6 @@ import java.io.IOException;
  */
 public class Main {
 
-    static double G = 6.67384e-11;
-
     public static void main(String[] args) {
 
         StarSystem sol = Sol.get();

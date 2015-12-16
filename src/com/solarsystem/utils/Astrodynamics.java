@@ -16,23 +16,17 @@
  You should have received a copy of the GNU General Public License
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.solarsystem;
+package com.solarsystem.utils;
 
-import static com.solarsystem.Main.G;
-import com.solarsystem.bodies.stars.Sun;
 import static java.lang.Math.sqrt;
 
 /**
  *
  * @author dmurphy
  */
-public class utils {
+public class Astrodynamics {
 
-    public static void main(String[] args) {
-
-        double vel = getVelocityAtDistance(Sun.get().getMass(), 147.095e9, 149.598023e9);
-        System.out.println(vel);
-    }
+    public static double G = 6.67384e-11;
 
     public static double getVelocityAtDistance(double M, double r, double a) {
 

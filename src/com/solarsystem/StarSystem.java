@@ -18,8 +18,8 @@
  */
 package com.solarsystem;
 
-import static com.solarsystem.Main.G;
 import com.solarsystem.bodies.Body;
+import static com.solarsystem.utils.Astrodynamics.G;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
