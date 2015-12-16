@@ -32,7 +32,12 @@ public class Main {
     public static void main(String[] args) {
 
         StarSystem sol = Sol.get();
-        sol.init();
+        try {
+            sol.init();
+        } catch (Exception e) {
+            System.out.println(e);
+            System.exit(-1);
+        }
 
         int t = 0;
         double dt = 60;

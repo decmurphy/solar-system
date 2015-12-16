@@ -40,5 +40,10 @@ public final class Moon extends Body {
     public String getName() {
         return "Moon";
     }
+    
+    @Override
+    public double[] getRGB() {
+        return new double[]{0.3, 0.3, 0.3};
+    }
 
 }

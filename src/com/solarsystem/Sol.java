@@ -50,7 +50,7 @@ public class Sol extends StarSystem {
     }
 
     @Override
-    public void init() {
+    public void init() throws Exception {
 
         for (Body body : getBodies()) {
 
@@ -62,31 +62,27 @@ public class Sol extends StarSystem {
 
             if (body instanceof Sun) {
 
+                body.setOrbiting(null);
                 body.setPos(new double[]{0, 0, 0});
                 body.setVel(new double[]{0, 0, 0});
-                body.setRgb(new double[]{1.0, 1.0, 1.0});
-                body.setOrbiting(null);
 
             } else if (body instanceof Earth) {
 
-                body.setPos(new double[]{149.598023e9, 0, 0});
-                body.setVel(new double[]{0, 0, -29.78e3});
-                body.setRgb(new double[]{0.0, 0.0, 1.0});
                 body.setOrbiting(Sun.get());
+                body.setOrbit(147.095e9, 152.1e9);
+                body.setAtPerihelion();
 
             } else if (body instanceof Moon) {
 
-                body.setPos(new double[]{Earth.get().getPos()[0] + 384399e3, 0, 0});
-                body.setVel(new double[]{0, 0, Earth.get().getVel()[2] - 1.022e3});
-                body.setRgb(new double[]{0.8, 0.8, 0.8});
                 body.setOrbiting(Earth.get());
+                body.setOrbit(362.6e6, 405.4e6);
+                body.setAtPerihelion();
 
             } else if (body instanceof Mars) {
 
-                body.setPos(new double[]{227.939200e9, 0, 0});
-                body.setVel(new double[]{0, 0, -24.077e3});
-                body.setRgb(new double[]{1.0, 0.0, 0.0});
                 body.setOrbiting(Sun.get());
+                body.setOrbit(206.7e9, 249.2e9);
+                body.setAtPerihelion();
 
             }
 

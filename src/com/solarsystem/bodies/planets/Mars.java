@@ -40,5 +40,10 @@ public final class Mars extends Body {
     public String getName() {
         return "Mars";
     }
+    
+    @Override
+    public double[] getRGB() {
+        return new double[]{1.0, 0.0, 0.0};
+    }
 
 }

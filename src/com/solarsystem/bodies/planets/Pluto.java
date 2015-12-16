@@ -16,7 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.solarsystem.bodies.stars;
+package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
 
@@ -24,11 +24,11 @@ import com.solarsystem.bodies.Body;
  *
  * @author declan
  */
-public class Sun extends Body {
+public final class Pluto extends Body {
 
-    private static final Body singleton = new Sun(696342e3, 1.98855e30);
+    private static final Body singleton = new Pluto(1187000, 1.303e22);
 
-    private Sun(double radius, double mass) {
+    private Pluto(double radius, double mass) {
         super(radius, mass);
     }
 
@@ -38,12 +38,12 @@ public class Sun extends Body {
 
     @Override
     public String getName() {
-        return "Sun";
+        return "Pluto";
     }
     
     @Override
     public double[] getRGB() {
-        return new double[]{1.0, 1.0, 1.0};
+        return new double[]{0.4, 0.4, 0.4};
     }
 
 }

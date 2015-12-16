@@ -56,7 +56,7 @@ public abstract class StarSystem {
         bodies.remove(b);
     }
 
-    public abstract void init();
+    public abstract void init() throws Exception;
 
     public abstract String getName();
 

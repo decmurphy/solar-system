@@ -18,6 +18,7 @@
  */
 package com.solarsystem.bodies;
 
+import static com.solarsystem.utils.getVelocityAtDistance;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -36,16 +37,19 @@ public abstract class Body {
     private final double[] pos;
     private final double[] vel;
     private final double[] accel;
-    private final double[] rgb;
     private final double radius;
     private final double mass;
+    
     private double energy;
+    private double r_a;
+    private double r_p;
+    private double a;
+    private double e;
 
     public Body(double radius, double mass) {
         this.pos = new double[3];
         this.vel = new double[3];
         this.accel = new double[3];
-        this.rgb = new double[3];
         this.radius = radius;
         this.mass = mass;
     }
@@ -64,6 +68,29 @@ public abstract class Body {
     public Body getParent() {
         return parent;
     }
+    
+    public final void setOrbit(double perihelion, double aphelion) {
+        this.r_a = aphelion;
+        this.r_p = perihelion;
+        this.a = (r_a + r_p)/2.0;
+        this.e = (r_a - r_p)/(2*a);
+    }
+    
+    public final void setAtPerihelion() throws Exception {
+        if(parent == null) 
+            throw new Exception(getName() + "'s parent is null. Can't set orbit.");
+        
+        setPos(new double[]{parent.getPos()[0]+r_p, parent.getPos()[1], parent.getPos()[2]});
+        setVel(new double[]{parent.getVel()[0], parent.getVel()[1], parent.getVel()[2]-getVelocityAtDistance(parent.getMass(), r_p, a)});
+    }
+    
+    public final void setAtAphelion() throws Exception {
+        if(parent == null) 
+            throw new Exception(getName() + "'s parent is null. Can't set orbit.");
+        
+        setPos(new double[]{parent.getPos()[0]+r_a, parent.getPos()[1], parent.getPos()[2]});
+        setVel(new double[]{parent.getVel()[0], parent.getVel()[1], parent.getVel()[2]-getVelocityAtDistance(parent.getMass(), r_a, a)});
+    }
 
     public final void setPos(double[] pos) {
         System.arraycopy(pos, 0, this.pos, 0, pos.length);
@@ -79,10 +106,6 @@ public abstract class Body {
 
     public final void setEnergy(double e) {
         this.energy = e;
-    }
-    
-    public final void setRgb(double[] rgb) {
-        System.arraycopy(rgb, 0, this.rgb, 0, rgb.length);
     }
 
     public final double[] getPos() {
@@ -108,12 +131,9 @@ public abstract class Body {
     public final double getEnergy() {
         return energy;
     }
-    
-    public final double[] getRgb() {
-        return rgb;
-    }
 
     public abstract String getName();
+    public abstract double[] getRGB();
 
     public final void draw() throws IOException {
         File outputFile = new File("output/" + getName() + ".output.txt");
