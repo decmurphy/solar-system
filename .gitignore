@@ -2,6 +2,6 @@ build.xml
 build/
 manifest.mf
 nbproject/
-output/
-plots/
+output/*
+images/*
 /dist/
