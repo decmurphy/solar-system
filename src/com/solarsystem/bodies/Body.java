@@ -39,7 +39,7 @@ public abstract class Body {
     private final double[] accel;
     private final double radius;
     private final double mass;
-    
+
     private double energy;
     private double r_a;
     private double r_p;
@@ -68,28 +68,30 @@ public abstract class Body {
     public Body getParent() {
         return parent;
     }
-    
+
     public final void setOrbit(double perihelion, double aphelion) {
         this.r_a = aphelion;
         this.r_p = perihelion;
-        this.a = (r_a + r_p)/2.0;
-        this.e = (r_a - r_p)/(2*a);
+        this.a = (r_a + r_p) / 2.0;
+        this.e = (r_a - r_p) / (2 * a);
     }
-    
+
     public final void setAtPerihelion() throws Exception {
-        if(parent == null) 
+        if (parent == null) {
             throw new Exception(getName() + "'s parent is null. Can't set orbit.");
-        
-        setPos(new double[]{parent.getPos()[0]+r_p, parent.getPos()[1], parent.getPos()[2]});
-        setVel(new double[]{parent.getVel()[0], parent.getVel()[1], parent.getVel()[2]-getVelocityAtDistance(parent.getMass(), r_p, a)});
+        }
+
+        setPos(new double[]{parent.getPos()[0] + r_p, parent.getPos()[1], parent.getPos()[2]});
+        setVel(new double[]{parent.getVel()[0], parent.getVel()[1], parent.getVel()[2] - getVelocityAtDistance(parent.getMass(), r_p, a)});
     }
-    
+
     public final void setAtAphelion() throws Exception {
-        if(parent == null) 
+        if (parent == null) {
             throw new Exception(getName() + "'s parent is null. Can't set orbit.");
-        
-        setPos(new double[]{parent.getPos()[0]+r_a, parent.getPos()[1], parent.getPos()[2]});
-        setVel(new double[]{parent.getVel()[0], parent.getVel()[1], parent.getVel()[2]-getVelocityAtDistance(parent.getMass(), r_a, a)});
+        }
+
+        setPos(new double[]{parent.getPos()[0] + r_a, parent.getPos()[1], parent.getPos()[2]});
+        setVel(new double[]{parent.getVel()[0], parent.getVel()[1], parent.getVel()[2] - getVelocityAtDistance(parent.getMass(), r_a, a)});
     }
 
     public final void setPos(double[] pos) {
@@ -133,6 +135,7 @@ public abstract class Body {
     }
 
     public abstract String getName();
+
     public abstract double[] getRGB();
 
     public final void draw() throws IOException {

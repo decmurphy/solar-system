@@ -52,8 +52,8 @@ public class Main {
             t += dt;
 
         } while (t < 1.1 * 31536000);
-        
-        for(Body body : sol.getBodies()) {
+
+        for (Body body : sol.getBodies()) {
             try {
                 body.draw();
             } catch (IOException e) {

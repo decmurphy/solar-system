@@ -69,18 +69,15 @@ public class Sol extends StarSystem {
         for (Body body : getBodies()) {
 
             // delete any existing data files
-            if(!new File("output").mkdir()) {
+            if (!new File("output").mkdir()) {
                 new File("output/" + body.getName() + ".dat").delete();
                 new File("output/" + body.getName() + ".output.txt").delete();
             }
-            
-            if(body.getParent() == null)
-            {
+
+            if (body.getParent() == null) {
                 body.setPos(new double[]{0, 0, 0});
                 body.setVel(new double[]{0, 0, 0});
-            }
-            else
-            {
+            } else {
                 body.setAtPerihelion();
             }
 

@@ -52,7 +52,7 @@ public final class Earth extends Body {
     public String getName() {
         return "Earth";
     }
-    
+
     @Override
     public double[] getRGB() {
         return new double[]{0.0, 0.0, 1.0};
