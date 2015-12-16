@@ -26,7 +26,7 @@ import com.solarsystem.bodies.Body;
  */
 public final class Mars extends Body {
 
-    public static final Body singleton = new Mars(3389500, 6.4171e23);
+    private static final Body singleton = new Mars(3389500, 6.4171e23);
 
     private Mars(double radius, double mass) {
         super(radius, mass);

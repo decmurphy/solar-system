@@ -18,6 +18,9 @@
  */
 package com.solarsystem;
 
+import com.solarsystem.bodies.Body;
+import java.io.IOException;
+
 /**
  *
  * @author declan
@@ -44,6 +47,15 @@ public class Main {
             t += dt;
 
         } while (t < 1.1 * 31536000);
+        
+        for(Body body : sol.getBodies()) {
+            try {
+                body.draw();
+            } catch (IOException e) {
+                System.out.println("Couldn't draw " + body.getName());
+                System.out.println(e.getMessage());
+            }
+        }
 
     }
 

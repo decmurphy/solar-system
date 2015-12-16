@@ -26,7 +26,7 @@ import com.solarsystem.bodies.Body;
  */
 public final class Moon extends Body {
 
-    public static final Body singleton = new Moon(1737100, 7.342e22);
+    private static final Body singleton = new Moon(1737100, 7.342e22);
 
     private Moon(double radius, double mass) {
         super(radius, mass);

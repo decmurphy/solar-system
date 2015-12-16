@@ -26,7 +26,7 @@ import com.solarsystem.bodies.Body;
  */
 public class Sun extends Body {
 
-    private static final Sun singleton = new Sun(696342e3, 1.98855e30);
+    private static final Body singleton = new Sun(696342e3, 1.98855e30);
 
     private Sun(double radius, double mass) {
         super(radius, mass);

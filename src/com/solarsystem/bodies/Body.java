@@ -116,7 +116,7 @@ public abstract class Body {
     public abstract String getName();
 
     public final void draw() throws IOException {
-        File outputFile = new File("/" + getName() + ".output.txt");
+        File outputFile = new File("output/" + getName() + ".output.txt");
         PrintWriter pw = new PrintWriter(new FileWriter(outputFile, false));
         double x, y, z;
         double theta, psi, dt = PI / 36, dp = PI / 36;
@@ -127,7 +127,7 @@ public abstract class Body {
                 x = radius * sin(theta) * cos(psi);
                 y = radius * sin(theta) * sin(psi);
 
-                pw.print((pos[0] + x) * 1e-3 + "\t" + (pos[1] + y) * 1e-3 + "\t" + (pos[2] + z) * 1e-3 + "\n");
+                pw.print((pos[0] + x) + "\t" + (pos[1] + y) + "\t" + (pos[2] + z) + "\n");
             }
             pw.print("\n");
         }

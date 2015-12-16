@@ -54,8 +54,11 @@ public class Sol extends StarSystem {
 
         for (Body body : getBodies()) {
 
-            // delete existing data files
-            new File("output/" + body.getName() + ".dat").delete();
+            // delete any existing data files
+            if(!new File("output").mkdir()) {
+                new File("output/" + body.getName() + ".dat").delete();
+                new File("output/" + body.getName() + ".output.txt").delete();
+            }
 
             if (body instanceof Sun) {
 
