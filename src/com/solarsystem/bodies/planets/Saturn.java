@@ -19,6 +19,7 @@
 package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
+import com.solarsystem.bodies.stars.Sun;
 
 /**
  *
@@ -30,6 +31,8 @@ public final class Saturn extends Body {
 
     private Saturn(double radius, double mass) {
         super(radius, mass);
+        setOrbiting(Sun.get());
+        setOrbit(1350e9, 1509e9);
     }
 
     public static Body get() {

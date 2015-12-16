@@ -19,6 +19,7 @@
 package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
+import com.solarsystem.bodies.stars.Sun;
 
 /**
  *
@@ -30,6 +31,8 @@ public final class Venus extends Body {
 
     private Venus(double radius, double mass) {
         super(radius, mass);
+        setOrbiting(Sun.get());
+        setOrbit(107.477e9, 108.939e9);
     }
 
     public static Body get() {

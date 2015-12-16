@@ -20,8 +20,15 @@ package com.solarsystem;
 
 import com.solarsystem.bodies.Body;
 import com.solarsystem.bodies.planets.Earth;
+import com.solarsystem.bodies.planets.Jupiter;
 import com.solarsystem.bodies.planets.Mars;
+import com.solarsystem.bodies.planets.Mercury;
 import com.solarsystem.bodies.planets.Moon;
+import com.solarsystem.bodies.planets.Neptune;
+import com.solarsystem.bodies.planets.Pluto;
+import com.solarsystem.bodies.planets.Saturn;
+import com.solarsystem.bodies.planets.Uranus;
+import com.solarsystem.bodies.planets.Venus;
 import com.solarsystem.bodies.stars.Sun;
 import java.io.File;
 
@@ -39,9 +46,16 @@ public class Sol extends StarSystem {
 
     private Sol() {
         addBody(Sun.get());
+        addBody(Mercury.get());
+        addBody(Venus.get());
         addBody(Earth.get());
         addBody(Moon.get());
         addBody(Mars.get());
+        addBody(Jupiter.get());
+        addBody(Saturn.get());
+        addBody(Uranus.get());
+        addBody(Neptune.get());
+        addBody(Pluto.get());
     }
 
     @Override
@@ -59,31 +73,15 @@ public class Sol extends StarSystem {
                 new File("output/" + body.getName() + ".dat").delete();
                 new File("output/" + body.getName() + ".output.txt").delete();
             }
-
-            if (body instanceof Sun) {
-
-                body.setOrbiting(null);
+            
+            if(body.getParent() == null)
+            {
                 body.setPos(new double[]{0, 0, 0});
                 body.setVel(new double[]{0, 0, 0});
-
-            } else if (body instanceof Earth) {
-
-                body.setOrbiting(Sun.get());
-                body.setOrbit(147.095e9, 152.1e9);
+            }
+            else
+            {
                 body.setAtPerihelion();
-
-            } else if (body instanceof Moon) {
-
-                body.setOrbiting(Earth.get());
-                body.setOrbit(362.6e6, 405.4e6);
-                body.setAtPerihelion();
-
-            } else if (body instanceof Mars) {
-
-                body.setOrbiting(Sun.get());
-                body.setOrbit(206.7e9, 249.2e9);
-                body.setAtPerihelion();
-
             }
 
         }

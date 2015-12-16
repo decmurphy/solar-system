@@ -19,6 +19,7 @@
 package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
+import com.solarsystem.bodies.stars.Sun;
 
 /**
  *
@@ -30,6 +31,8 @@ public final class Uranus extends Body {
 
     private Uranus(double radius, double mass) {
         super(radius, mass);
+        setOrbiting(Sun.get());
+        setOrbit(2742e9, 3008e9);
     }
 
     public static Body get() {

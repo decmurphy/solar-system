@@ -19,6 +19,7 @@
 package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
+import com.solarsystem.bodies.stars.Sun;
 
 /**
  *
@@ -30,6 +31,8 @@ public final class Mercury extends Body {
 
     private Mercury(double radius, double mass) {
         super(radius, mass);
+        setOrbiting(Sun.get());
+        setOrbit(46.0012e9, 69.8169e9);
     }
 
     public static Body get() {

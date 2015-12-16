@@ -19,6 +19,7 @@
 package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
+import com.solarsystem.bodies.stars.Sun;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -39,6 +40,8 @@ public final class Earth extends Body {
 
     private Earth(double radius, double mass) {
         super(radius, mass);
+        setOrbiting(Sun.get());
+        setOrbit(147.095e9, 152.1e9);
     }
 
     public static Body get() {

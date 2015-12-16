@@ -19,6 +19,7 @@
 package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
+import com.solarsystem.bodies.stars.Sun;
 
 /**
  *
@@ -30,6 +31,8 @@ public final class Jupiter extends Body {
 
     private Jupiter(double radius, double mass) {
         super(radius, mass);
+        setOrbiting(Sun.get());
+        setOrbit(740.55e9, 816.04e9);
     }
 
     public static Body get() {

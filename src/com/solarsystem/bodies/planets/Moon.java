@@ -30,6 +30,8 @@ public final class Moon extends Body {
 
     private Moon(double radius, double mass) {
         super(radius, mass);
+        setOrbiting(Earth.get());
+        setOrbit(362.6e6, 405.4e6);
     }
 
     public static Body get() {
