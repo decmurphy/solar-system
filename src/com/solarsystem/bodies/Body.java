@@ -156,7 +156,7 @@ public abstract class Body {
         
         PrintWriter pw = null;
         try {
-            File outputFile = new File("output/" + getName() + ".dat");
+            File outputFile = new File("output/" + getName() + ".draw.dat");
 
             pw = new PrintWriter(new FileWriter(outputFile, true));
 

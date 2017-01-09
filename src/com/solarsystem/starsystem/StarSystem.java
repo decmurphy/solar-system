@@ -16,7 +16,7 @@
  You should have received a copy of the GNU General Public License
  along with FlightClub.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.solarsystem;
+package com.solarsystem.starsystem;
 
 import com.solarsystem.bodies.Body;
 import static com.solarsystem.utils.Astrodynamics.G;
@@ -24,9 +24,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Math.acos;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +58,7 @@ public abstract class StarSystem {
         bodies.remove(b);
     }
 
-    public abstract void init() throws Exception;
+    public abstract void init(int year) throws Exception;
 
     public abstract String getName();
 
@@ -65,33 +67,37 @@ public abstract class StarSystem {
         updateAcceleration();
 
         for (Body body : bodies) {
-            body.getVel()[0] += body.getAccel()[0] * dt / 2;
-            body.getVel()[2] += body.getAccel()[2] * dt / 2;
+            for(int i=0;i<3;i++) {
+                body.getVel()[i] += body.getAccel()[i] * dt / 2;                
+            }
         }
     }
 
     public void leapfrog(double dt) {
 
         for (Body body : bodies) {
-
-            body.getPos()[0] += body.getVel()[0] * dt;
-            body.getPos()[2] += body.getVel()[2] * dt;
-
-            // set accels to zero again
-            System.arraycopy(new double[3], 0, body.getAccel(), 0, 3);
+            for(int i=0;i<3;i++) {
+                body.getPos()[i] += body.getVel()[i] * dt;
+            }
         }
 
         updateAcceleration();
 
         for (Body body : bodies) {
-            body.getVel()[0] += body.getAccel()[0] * dt;
-            body.getVel()[2] += body.getAccel()[2] * dt;
+            for(int i=0;i<3;i++) {
+                body.getVel()[i] += body.getAccel()[i] * dt;                
+            }
         }
 
     }
 
     private void updateAcceleration() {
 
+        for (Body body : bodies) {
+            // set accels to zero again
+            System.arraycopy(new double[3], 0, body.getAccel(), 0, 3);
+        }
+        
         Body star = null;
         // The star in the system interacts with all bodies
         for (Body body : bodies) {
@@ -99,26 +105,31 @@ public abstract class StarSystem {
             // Find the star and set accelerations for all bodies
             if (body.isOrbiting(null)) {
                 star = body;
-                for (Body otherBody : bodies) {
+                for (Body child : bodies) {
 
-                    if (body.equals(otherBody)) {
+                    if (star.equals(child)) {
                         continue;
                     }
 
-                    double Rx = otherBody.getPos()[0] - body.getPos()[0];
-                    double Rz = otherBody.getPos()[2] - body.getPos()[2];
+                    double Rx = child.getPos()[0] - star.getPos()[0];
+                    double Ry = child.getPos()[1] - star.getPos()[1];
+                    double Rz = child.getPos()[2] - star.getPos()[2];
+                    double R_sq = (Rx * Rx) + (Ry * Ry) + (Rz * Rz);
+
                     double psi = atan2(Rz, Rx);
-                    double R_sq = Rx * Rx + Rz * Rz;
+                    double theta = acos(Ry/sqrt(R_sq));
 
-                    double A = G * otherBody.getMass() / R_sq;
+                    double A = G * child.getMass() / R_sq;
 
-                    body.getAccel()[0] += A * cos(psi);
-                    body.getAccel()[2] += A * sin(psi);
+                    star.getAccel()[0] += A * sin(theta) * cos(psi);
+                    star.getAccel()[1] += A * cos(theta);
+                    star.getAccel()[2] += A * sin(theta) * sin(psi);
 
-                    A *= body.getMass() / otherBody.getMass();
+                    A *= star.getMass() / child.getMass();
 
-                    otherBody.getAccel()[0] -= A * cos(psi);
-                    otherBody.getAccel()[2] -= A * sin(psi);
+                    child.getAccel()[0] -= A * sin(theta) * cos(psi);
+                    child.getAccel()[1] -= A * cos(theta);
+                    child.getAccel()[2] -= A * sin(theta) * sin(psi);
                 }
                 break;
             }
@@ -133,19 +144,24 @@ public abstract class StarSystem {
                 Body otherBody = body.getParent();
 
                 double Rx = otherBody.getPos()[0] - body.getPos()[0];
+                double Ry = otherBody.getPos()[1] - body.getPos()[1];
                 double Rz = otherBody.getPos()[2] - body.getPos()[2];
+                double R_sq = (Rx * Rx) + (Ry * Ry) + (Rz * Rz);
+
                 double psi = atan2(Rz, Rx);
-                double R_sq = Rx * Rx + Rz * Rz;
+                double theta = acos(Ry/sqrt(R_sq));
 
                 double A = G * otherBody.getMass() / R_sq;
 
-                body.getAccel()[0] += A * cos(psi);
-                body.getAccel()[2] += A * sin(psi);
+                body.getAccel()[0] += A * sin(theta) * cos(psi);
+                body.getAccel()[1] += A * cos(theta);
+                body.getAccel()[2] += A * sin(theta) * sin(psi);
 
                 A *= body.getMass() / otherBody.getMass();
 
-                otherBody.getAccel()[0] -= A * cos(psi);
-                otherBody.getAccel()[2] -= A * sin(psi);
+                otherBody.getAccel()[0] -= A * sin(theta) * cos(psi);
+                otherBody.getAccel()[1] -= A * cos(theta);
+                otherBody.getAccel()[2] -= A * sin(theta) * sin(psi);
 
             }
         }

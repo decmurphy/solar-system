@@ -18,8 +18,12 @@
  */
 package com.solarsystem;
 
-import com.solarsystem.bodies.Body;
-import java.io.IOException;
+import com.solarsystem.starsystem.Sol;
+import com.solarsystem.starsystem.StarSystem;
+import static com.solarsystem.utils.Astrodynamics.getSeconds;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  *
@@ -29,9 +33,13 @@ public class Main {
 
     public static void main(String[] args) {
 
+        int year = 1970;
+        if(args.length>0)
+            year = Integer.parseInt(args[0]);
+        
         StarSystem sol = Sol.get();
         try {
-            sol.init();
+            sol.init(year);
         } catch (Exception e) {
             System.out.println(e);
             System.exit(-1);
@@ -43,14 +51,15 @@ public class Main {
         do {
 
             sol.leapfrog(dt);
-            if (t % (60 * 60 * 12) == 0) {
+            if (t % (getSeconds(0, 0, 10, 0)) == 0) {
                 sol.output();
             }
 
             t += dt;
 
-        } while (t < 1.1 * 31536000);
+        } while (t < getSeconds(365, 0, 0, 0));
 
+        /*
         for (Body body : sol.getBodies()) {
             try {
                 body.draw();
@@ -59,6 +68,7 @@ public class Main {
                 System.err.println(e.getMessage());
             }
         }
+        */
 
     }
 

@@ -25,11 +25,11 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  *
  * @author declan
  */
-public final class Moon extends Body {
+public final class Luna extends Body {
 
-    private static final Body SINGLETON = new Moon(1737100, 7.342e22, getSeconds(27.32, 0, 0, 0));
+    private static final Body SINGLETON = new Luna(1737100, 7.342e22, getSeconds(27.32, 0, 0, 0));
 
-    private Moon(double radius, double mass, long period) {
+    private Luna(double radius, double mass, long period) {
         super(radius, mass, period);
         setOrbiting(Earth.get());
         setOrbit(362.6e6, 405.4e6);
@@ -41,7 +41,7 @@ public final class Moon extends Body {
 
     @Override
     public String getName() {
-        return "Moon";
+        return "Luna";
     }
     
     @Override
