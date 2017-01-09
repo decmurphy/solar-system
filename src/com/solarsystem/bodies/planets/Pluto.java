@@ -1,7 +1,7 @@
 /*
  This file is part of FlightClub.
 
- Copyright © 2014-2015 Declan Murphy
+ Copyright © 2014-2017 Declan Murphy
 
  FlightClub is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
 import com.solarsystem.bodies.stars.Sun;
+import static com.solarsystem.utils.Astrodynamics.getSeconds;
 
 /**
  *
@@ -27,10 +28,10 @@ import com.solarsystem.bodies.stars.Sun;
  */
 public final class Pluto extends Body {
 
-    private static final Body singleton = new Pluto(1187000, 1.303e22);
+    private static final Body singleton = new Pluto(1187000, 1.303e22, getSeconds(6, 9, 18, 0));
 
-    private Pluto(double radius, double mass) {
-        super(radius, mass);
+    private Pluto(double radius, double mass, long period) {
+        super(radius, mass, period);
         setOrbiting(Sun.get());
         setOrbit(4.4364e12, 7.37807e12);
     }
@@ -47,6 +48,21 @@ public final class Pluto extends Body {
     @Override
     public double[] getRGB() {
         return new double[]{0.4, 0.4, 0.4};
+    }
+
+    @Override
+    public double densityAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double pressureAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double speedOfSoundAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

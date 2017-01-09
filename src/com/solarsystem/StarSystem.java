@@ -1,7 +1,7 @@
 /*
  This file is part of FlightClub.
 
- Copyright © 2014-2015 Declan Murphy
+ Copyright © 2014-2017 Declan Murphy
 
  FlightClub is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

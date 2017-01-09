@@ -1,7 +1,7 @@
 /*
  This file is part of FlightClub.
 
- Copyright © 2014-2015 Declan Murphy
+ Copyright © 2014-2017 Declan Murphy
 
  FlightClub is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
+import static com.solarsystem.utils.Astrodynamics.getSeconds;
 
 /**
  *
@@ -26,10 +27,10 @@ import com.solarsystem.bodies.Body;
  */
 public final class Moon extends Body {
 
-    private static final Body singleton = new Moon(1737100, 7.342e22);
+    private static final Body singleton = new Moon(1737100, 7.342e22, getSeconds(27.32, 0, 0, 0));
 
-    private Moon(double radius, double mass) {
-        super(radius, mass);
+    private Moon(double radius, double mass, long period) {
+        super(radius, mass, period);
         setOrbiting(Earth.get());
         setOrbit(362.6e6, 405.4e6);
     }
@@ -46,6 +47,21 @@ public final class Moon extends Body {
     @Override
     public double[] getRGB() {
         return new double[]{0.3, 0.3, 0.3};
+    }
+
+    @Override
+    public double densityAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double pressureAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double speedOfSoundAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

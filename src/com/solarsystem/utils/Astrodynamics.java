@@ -1,7 +1,7 @@
 /*
  This file is part of FlightClub.
 
- Copyright © 2014-2015 Declan Murphy
+ Copyright © 2014-2017 Declan Murphy
 
  FlightClub is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,15 @@ public class Astrodynamics {
         double mu = G * M;
         return mu * r / (2 * mu - r * v * v);
 
+    }
+    
+    public static long getSeconds(double days, double hours, double minutes, double seconds) {
+        return (long) (
+                    days*24*60*60 +
+                    hours*60*60 +
+                    minutes*60 +
+                    seconds
+                );
     }
 
 }

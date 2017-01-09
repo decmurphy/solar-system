@@ -1,7 +1,7 @@
 /*
  This file is part of FlightClub.
 
- Copyright © 2014-2015 Declan Murphy
+ Copyright © 2014-2017 Declan Murphy
 
  FlightClub is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ package com.solarsystem.bodies.planets;
 
 import com.solarsystem.bodies.Body;
 import com.solarsystem.bodies.stars.Sun;
+import static com.solarsystem.utils.Astrodynamics.getSeconds;
 
 /**
  *
@@ -27,10 +28,10 @@ import com.solarsystem.bodies.stars.Sun;
  */
 public final class Uranus extends Body {
 
-    private static final Body singleton = new Uranus(25362000, 8.681e25);
+    private static final Body singleton = new Uranus(25362000, 8.681e25, getSeconds(0, 16.8, 0, 0));
 
-    private Uranus(double radius, double mass) {
-        super(radius, mass);
+    private Uranus(double radius, double mass, long period) {
+        super(radius, mass, period);
         setOrbiting(Sun.get());
         setOrbit(2742e9, 3008e9);
     }
@@ -47,6 +48,21 @@ public final class Uranus extends Body {
     @Override
     public double[] getRGB() {
         return new double[]{0.0, 0.0, 1.0};
+    }
+
+    @Override
+    public double densityAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double pressureAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public double speedOfSoundAtAltitude(double altitude) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

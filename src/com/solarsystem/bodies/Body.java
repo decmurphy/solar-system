@@ -1,7 +1,7 @@
 /*
  This file is part of FlightClub.
 
- Copyright © 2014-2015 Declan Murphy
+ Copyright © 2014-2017 Declan Murphy
 
  FlightClub is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  */
 package com.solarsystem.bodies;
 
+import static com.solarsystem.utils.Astrodynamics.G;
 import static com.solarsystem.utils.Astrodynamics.getVelocityAtDistance;
 import java.io.File;
 import java.io.FileWriter;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 
 /**
@@ -45,13 +48,15 @@ public abstract class Body {
     private double r_p;
     private double a;
     private double e;
+    private double angVel;
 
-    public Body(double radius, double mass) {
+    public Body(double radius, double mass, long period) {
         this.pos = new double[3];
         this.vel = new double[3];
         this.accel = new double[3];
         this.radius = radius;
         this.mass = mass;
+        this.angVel = 2*PI/period;
     }
 
     public final void setOrbiting(Body parent) {
@@ -106,6 +111,10 @@ public abstract class Body {
         System.arraycopy(accel, 0, this.accel, 0, accel.length);
     }
 
+    public void setAngVel(double angVel) {
+        this.angVel = angVel;
+    }
+
     public final void setEnergy(double e) {
         this.energy = e;
     }
@@ -120,6 +129,10 @@ public abstract class Body {
 
     public final double[] getAccel() {
         return accel;
+    }
+
+    public double getAngVel() {
+        return angVel;
     }
 
     public final double getRadius() {
@@ -155,4 +168,17 @@ public abstract class Body {
             pw.print("\n");
         }
     }
+
+    public double gravityAtAltitude(double alt) {
+        return G * mass / pow(alt + radius, 2);
+    }
+
+    public double gravityAtRadius(double r) {
+        r = max(radius, r);
+        return G * mass / pow(r, 2);
+    }
+    
+    public abstract double densityAtAltitude(double altitude);
+    public abstract double pressureAtAltitude(double altitude);
+    public abstract double speedOfSoundAtAltitude(double altitude);
 }
