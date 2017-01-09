@@ -28,7 +28,7 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  */
 public final class Uranus extends Body {
 
-    private static final Body singleton = new Uranus(25362000, 8.681e25, getSeconds(0, 16.8, 0, 0));
+    private static final Body SINGLETON = new Uranus(25362000, 8.681e25, getSeconds(0, 16.8, 0, 0));
 
     private Uranus(double radius, double mass, long period) {
         super(radius, mass, period);
@@ -37,7 +37,7 @@ public final class Uranus extends Body {
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override

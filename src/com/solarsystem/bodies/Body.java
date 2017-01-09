@@ -151,21 +151,34 @@ public abstract class Body {
 
     public abstract double[] getRGB();
 
+    // draws the actual sphere of the planet, not any kind of trajectory
     public final void draw() throws IOException {
-        File outputFile = new File("output/" + getName() + ".output.txt");
-        PrintWriter pw = new PrintWriter(new FileWriter(outputFile, false));
-        double x, y, z;
-        double theta, psi, dt = PI / 36, dp = PI / 36;
+        
+        PrintWriter pw = null;
+        try {
+            File outputFile = new File("output/" + getName() + ".dat");
 
-        for (theta = 0; theta < PI; theta += dt) {
-            z = radius * cos(theta);
-            for (psi = 0; psi < 2 * PI; psi += dp) {
-                x = radius * sin(theta) * cos(psi);
-                y = radius * sin(theta) * sin(psi);
+            pw = new PrintWriter(new FileWriter(outputFile, true));
 
-                pw.print((pos[0] + x) + "\t" + (pos[1] + y) + "\t" + (pos[2] + z) + "\n");
+            double x, y, z;
+            double theta, psi, dt = PI / 36, dp = PI / 36;
+
+            for (theta = 0; theta < PI; theta += dt) {
+                z = radius * cos(theta);
+                for (psi = 0; psi < 2 * PI; psi += dp) {
+                    x = radius * sin(theta) * cos(psi);
+                    y = radius * sin(theta) * sin(psi);
+
+                    pw.print((pos[0] + x) + ";" + (pos[1] + y) + ";" + (pos[2] + z) + "\n");
+                }
+                pw.print("\n");
             }
-            pw.print("\n");
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        } finally {
+            if (pw != null) {
+                pw.close();
+            }
         }
     }
 

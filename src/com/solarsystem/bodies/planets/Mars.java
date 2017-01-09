@@ -28,7 +28,7 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  */
 public final class Mars extends Body {
 
-    private static final Body singleton = new Mars(3389500, 6.4171e23, getSeconds(0, 24, 37, 0));
+    private static final Body SINGLETON = new Mars(3389500, 6.4171e23, getSeconds(0, 24, 37, 0));
 
     private Mars(double radius, double mass, long period) {
         super(radius, mass, period);
@@ -37,7 +37,7 @@ public final class Mars extends Body {
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override

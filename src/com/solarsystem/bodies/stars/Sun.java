@@ -27,14 +27,14 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  */
 public class Sun extends Body {
 
-    private static final Body singleton = new Sun(696342e3, 1.98855e30, getSeconds(24.47, 0, 0, 0));
+    private static final Body SINGLETON = new Sun(696342e3, 1.98855e30, getSeconds(24.47, 0, 0, 0));
 
     private Sun(double radius, double mass, long period) {
         super(radius, mass, period);
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override

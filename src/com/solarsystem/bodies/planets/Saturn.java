@@ -28,7 +28,7 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  */
 public final class Saturn extends Body {
 
-    private static final Body singleton = new Saturn(58232000, 5.6836e26, getSeconds(0, 10, 40, 24));
+    private static final Body SINGLETON = new Saturn(58232000, 5.6836e26, getSeconds(0, 10, 40, 24));
 
     private Saturn(double radius, double mass, long period) {
         super(radius, mass, period);
@@ -37,7 +37,7 @@ public final class Saturn extends Body {
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override

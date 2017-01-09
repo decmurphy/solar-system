@@ -151,20 +151,19 @@ public abstract class StarSystem {
         }
     }
 
+    // draws positions (or trajectories when continuous)
     public void output() {
 
         for (Body body : bodies) {
 
             PrintWriter pw = null;
             try {
-                String fileName = "output/" + body.getName() + ".dat";
-                File outputFile = new File(fileName);
-
+                File outputFile = new File("output/" + body.getName() + ".dat");
                 pw = new PrintWriter(new FileWriter(outputFile, true));
                 pw.printf("%9.3f\t%9.3f\t%9.3f\n", body.getPos()[0], body.getPos()[1], body.getPos()[2]);
 
             } catch (IOException e) {
-                int x = 5;
+                System.err.println(e.getMessage());
             } finally {
                 if (pw != null) {
                     pw.close();

@@ -28,7 +28,7 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  */
 public final class Neptune extends Body {
 
-    private static final Body singleton = new Neptune(24622, 1.0243e26, getSeconds(0, 16, 11, 0));
+    private static final Body SINGLETON = new Neptune(24622, 1.0243e26, getSeconds(0, 16, 11, 0));
 
     private Neptune(double radius, double mass, long period) {
         super(radius, mass, period);
@@ -37,7 +37,7 @@ public final class Neptune extends Body {
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override

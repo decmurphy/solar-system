@@ -28,7 +28,7 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  */
 public final class Pluto extends Body {
 
-    private static final Body singleton = new Pluto(1187000, 1.303e22, getSeconds(6, 9, 18, 0));
+    private static final Body SINGLETON = new Pluto(1187000, 1.303e22, getSeconds(6, 9, 18, 0));
 
     private Pluto(double radius, double mass, long period) {
         super(radius, mass, period);
@@ -37,7 +37,7 @@ public final class Pluto extends Body {
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override

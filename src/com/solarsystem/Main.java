@@ -55,8 +55,8 @@ public class Main {
             try {
                 body.draw();
             } catch (IOException e) {
-                System.out.println("Couldn't draw " + body.getName());
-                System.out.println(e.getMessage());
+                System.err.println("Couldn't draw " + body.getName());
+                System.err.println(e.getMessage());
             }
         }
 

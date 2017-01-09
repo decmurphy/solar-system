@@ -38,10 +38,10 @@ import java.io.File;
  */
 public class Sol extends StarSystem {
 
-    private static final StarSystem singleton = new Sol();
+    private static final StarSystem SINGLETON = new Sol();
 
     public static StarSystem get() {
-        return singleton;
+        return SINGLETON;
     }
 
     private Sol() {

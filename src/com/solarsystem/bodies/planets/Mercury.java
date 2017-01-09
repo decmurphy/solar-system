@@ -28,7 +28,7 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  */
 public final class Mercury extends Body {
 
-    private static final Body singleton = new Mercury(2439700, 3.3011e23, getSeconds(59, 0, 0, 0));
+    private static final Body SINGLETON = new Mercury(2439700, 3.3011e23, getSeconds(59, 0, 0, 0));
 
     private Mercury(double radius, double mass, long period) {
         super(radius, mass, period);
@@ -37,7 +37,7 @@ public final class Mercury extends Body {
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override

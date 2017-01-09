@@ -27,7 +27,7 @@ import static com.solarsystem.utils.Astrodynamics.getSeconds;
  */
 public final class Moon extends Body {
 
-    private static final Body singleton = new Moon(1737100, 7.342e22, getSeconds(27.32, 0, 0, 0));
+    private static final Body SINGLETON = new Moon(1737100, 7.342e22, getSeconds(27.32, 0, 0, 0));
 
     private Moon(double radius, double mass, long period) {
         super(radius, mass, period);
@@ -36,7 +36,7 @@ public final class Moon extends Body {
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override

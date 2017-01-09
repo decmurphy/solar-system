@@ -21,18 +21,9 @@ package com.solarsystem.bodies.planets;
 import com.solarsystem.bodies.Body;
 import com.solarsystem.bodies.stars.Sun;
 import static com.solarsystem.utils.Astrodynamics.getSeconds;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import static java.lang.Math.cos;
 import static java.lang.Math.exp;
 import static java.lang.Math.max;
 import static java.lang.Math.pow;
-import static java.lang.Math.sin;
-import static java.lang.Math.toRadians;
 
 /**
  *
@@ -40,7 +31,7 @@ import static java.lang.Math.toRadians;
  */
 public final class Earth extends Body {
 
-    private static final Body singleton = new Earth(6378137, 5.972e24, getSeconds(0, 23, 56, 4));
+    private static final Body SINGLETON = new Earth(6378137, 5.972e24, getSeconds(0, 23, 56, 4));
 
     private Earth(double radius, double mass, long period) {
         super(radius, mass, period);
@@ -49,7 +40,7 @@ public final class Earth extends Body {
     }
 
     public static Body get() {
-        return singleton;
+        return SINGLETON;
     }
 
     @Override
@@ -60,38 +51,6 @@ public final class Earth extends Body {
     @Override
     public double[] getRGB() {
         return new double[]{0.0, 0.0, 1.0};
-    }
-
-    public void drawHazardMap(File inputFile, File outputFile) throws IOException {
-        PrintWriter pw = null;
-        BufferedReader br;
-
-        double theta, psi;
-        double R = getRadius() * 1e-3;
-
-        try {
-            String line;
-            pw = new PrintWriter(new FileWriter(outputFile, false));
-            br = new BufferedReader(new FileReader(inputFile));
-
-            while ((line = br.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    String[] parts = line.split("\\s+");
-
-                    psi = toRadians(Double.parseDouble(parts[0]));
-                    theta = toRadians(90 - Double.parseDouble(parts[1]));
-                    pw.print(R * sin(theta) * cos(psi) + "\t" + R * sin(theta) * sin(psi) + "\t" + R * cos(theta) + "\n");
-                } else {
-                    pw.print("\n");
-                }
-            }
-        } catch (IOException e) {
-            throw e;
-        } finally {
-            if (pw != null) {
-                pw.close();
-            }
-        }
     }
 
     @Override
