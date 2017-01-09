@@ -21,9 +21,7 @@ package com.solarsystem;
 import com.solarsystem.starsystem.Sol;
 import com.solarsystem.starsystem.StarSystem;
 import static com.solarsystem.utils.Astrodynamics.getSeconds;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.Calendar;
 
 /**
  *
@@ -31,33 +29,35 @@ import java.util.TimeZone;
  */
 public class Main {
 
-    public static void main(String[] args) {
-
-        int year = 1970;
-        if(args.length>0)
-            year = Integer.parseInt(args[0]);
+    public static void getSystemState(StarSystem system, long millisStart, long millisEnd) throws Exception {
+        getSystemState(system, millisStart, millisEnd, 60, 1, 0, 0, 0);
+    }
+    
+    public static void getSystemState(StarSystem system, long millisStart, long millisEnd, 
+            double dt, double outputDay, double outputHour, double outputMin, double outputSec) throws Exception {
         
         StarSystem sol = Sol.get();
-        try {
-            sol.init(year);
-        } catch (Exception e) {
-            System.out.println(e);
-            System.exit(-1);
-        }
+        
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(millisStart);
+        int year = c.get(Calendar.YEAR);
+        sol.init(year);
+        
+        long secondsStart = millisStart/1000;
+        long secondsEnd = millisEnd/1000;
 
-        int t = 0;
-        double dt = 60;
+        long t = secondsStart;
         sol.leapfrogFirstStep(dt);
         do {
 
             sol.leapfrog(dt);
-            if (t % (getSeconds(0, 0, 10, 0)) == 0) {
-                sol.output();
+            if (t>secondsStart && t % (getSeconds(outputDay, outputHour, outputMin, outputSec)) == 0) {
+                sol.output(t);
             }
 
             t += dt;
 
-        } while (t < getSeconds(365, 0, 0, 0));
+        } while (t < secondsEnd);
 
         /*
         for (Body body : sol.getBodies()) {
@@ -69,7 +69,26 @@ public class Main {
             }
         }
         */
+    
+    }
+    
+    public static void main(String[] args) {
 
+        int year = 1970;
+        if(args.length>0)
+            year = Integer.parseInt(args[0]);
+        
+        Calendar start = Calendar.getInstance(); 
+        Calendar end = Calendar.getInstance(); 
+        start.set(year,0,1,0,0,0);
+        end.set(year+1,0,1,0,0,0);
+        
+        try {
+            getSystemState(Sol.get(), start.getTimeInMillis(), end.getTimeInMillis());
+        } catch (Exception e) {
+            System.out.println(e);
+            System.exit(-1);
+        }
     }
 
 }

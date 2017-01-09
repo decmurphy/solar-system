@@ -168,7 +168,7 @@ public abstract class StarSystem {
     }
 
     // draws positions (or trajectories when continuous)
-    public void output() {
+    public void output(double t) {
 
         for (Body body : bodies) {
 
@@ -176,7 +176,7 @@ public abstract class StarSystem {
             try {
                 File outputFile = new File("output/" + body.getName() + ".dat");
                 pw = new PrintWriter(new FileWriter(outputFile, true));
-                pw.printf("%9.3f\t%9.3f\t%9.3f\n", body.getPos()[0], body.getPos()[1], body.getPos()[2]);
+                pw.printf("%9.3f\t%9.3f\t%9.3f\t%9.3f\n", t, body.getPos()[0], body.getPos()[1], body.getPos()[2]);
 
             } catch (IOException e) {
                 System.err.println(e.getMessage());
