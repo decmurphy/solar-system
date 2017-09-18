@@ -38,7 +38,7 @@ public abstract class StarSystem {
 	private final List<Body> bodies;
 
 	public StarSystem() {
-		this.bodies = new ArrayList();
+		this.bodies = new ArrayList<Body>();
 	}
 
 	public final List<Body> getBodies() {
