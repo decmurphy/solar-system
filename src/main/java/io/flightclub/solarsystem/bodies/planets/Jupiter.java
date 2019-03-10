@@ -31,18 +31,13 @@ public final class Jupiter extends Body {
 	private static final Body SINGLETON = new Jupiter(69911000, 1.8986e27, getSeconds(0, 9, 55, 30));
 
 	private Jupiter(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Jupiter", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(740.55e9, 816.04e9);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Jupiter";
 	}
 
 	@Override

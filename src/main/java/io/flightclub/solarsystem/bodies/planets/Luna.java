@@ -30,18 +30,13 @@ public final class Luna extends Body {
 	private static final Body SINGLETON = new Luna(1737100, 7.342e22, getSeconds(27.32, 0, 0, 0));
 
 	private Luna(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Luna", radius, mass, period);
 		setOrbiting(Earth.get());
 		setOrbit(362.6e6, 405.4e6);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Luna";
 	}
 
 	@Override

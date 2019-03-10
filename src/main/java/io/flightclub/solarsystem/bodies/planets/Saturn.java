@@ -31,18 +31,13 @@ public final class Saturn extends Body {
 	private static final Body SINGLETON = new Saturn(58232000, 5.6836e26, getSeconds(0, 10, 40, 24));
 
 	private Saturn(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Saturn", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(1350e9, 1509e9);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Saturn";
 	}
 
 	@Override

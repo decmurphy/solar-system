@@ -31,18 +31,13 @@ public final class Mercury extends Body {
 	private static final Body SINGLETON = new Mercury(2439700, 3.3011e23, getSeconds(59, 0, 0, 0));
 
 	private Mercury(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Mercury", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(46.0012e9, 69.8169e9);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Mercury";
 	}
 
 	@Override

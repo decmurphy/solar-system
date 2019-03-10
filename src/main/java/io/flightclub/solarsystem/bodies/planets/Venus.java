@@ -31,18 +31,13 @@ public final class Venus extends Body {
 	private static final Body SINGLETON = new Venus(6051800, 4.8675e24, getSeconds(243, 0, 0, 0));
 
 	private Venus(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Venus", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(107.477e9, 108.939e9);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Venus";
 	}
 
 	@Override

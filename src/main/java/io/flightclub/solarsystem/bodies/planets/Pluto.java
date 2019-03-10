@@ -31,18 +31,13 @@ public final class Pluto extends Body {
 	private static final Body SINGLETON = new Pluto(1187000, 1.303e22, getSeconds(6, 9, 18, 0));
 
 	private Pluto(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Pluto", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(4.4364e12, 7.37807e12);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Pluto";
 	}
 
 	@Override

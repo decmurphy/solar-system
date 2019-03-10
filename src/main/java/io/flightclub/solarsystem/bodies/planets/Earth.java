@@ -32,18 +32,13 @@ public final class Earth extends Body {
 	private static final Body SINGLETON = new Earth(6378137, 5.9722e24, getSeconds(0, 23, 56, 4));
 
 	private Earth(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Earth", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(147.095e9, 152.1e9);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Earth";
 	}
 
 	@Override

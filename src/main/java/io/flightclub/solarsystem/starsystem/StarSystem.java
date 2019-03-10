@@ -19,12 +19,17 @@
 package io.flightclub.solarsystem.starsystem;
 
 import io.flightclub.solarsystem.bodies.Body;
+import io.flightclub.solarsystem.bodies.OrbitingObject;
+import io.flightclub.solarsystem.bodies.satellites.Satellite;
+import io.flightclub.solarsystem.utils.Resources;
+import lombok.Data;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.flightclub.solarsystem.utils.Astrodynamics.G;
@@ -33,26 +38,36 @@ import static java.lang.Math.*;
 /**
  * @author declan
  */
+@Data
 public abstract class StarSystem {
 
 	private final List<Body> bodies;
+	private final List<Satellite> satellites;
 
-	public StarSystem() {
-		this.bodies = new ArrayList<Body>();
+	StarSystem() {
+
+		this.bodies = new ArrayList<>();
+		this.satellites = new ArrayList<>();
 	}
 
-	public final List<Body> getBodies() {
-		return bodies;
-	}
-
-	public final void addBody(Body b) {
+	final void addBody(Body b) {
 		if (!bodies.contains(b)) {
 			bodies.add(b);
 		}
 	}
 
+	final void addSatellite(Satellite sat) {
+		if (!satellites.contains(sat)) {
+			satellites.add(sat);
+		}
+	}
+
 	public final void removeBody(Body b) {
 		bodies.remove(b);
+	}
+
+	public final void removeSatellite(Satellite sat) {
+		satellites.remove(sat);
 	}
 
 	public abstract void init(int year) throws Exception;
@@ -68,21 +83,56 @@ public abstract class StarSystem {
 				body.getVel()[i] += body.getAccel()[i] * dt / 2;
 			}
 		}
+		for (Satellite sat : satellites) {
+			for (int i = 0; i < 3; i++) {
+				sat.getVel()[i] += sat.getAccel()[i] * dt / 2;
+			}
+		}
 	}
 
-	public void leapfrog(double dt) {
+	public void leapfrog(double t, double dt) {
 
 		for (Body body : bodies) {
-			for (int i = 0; i < 3; i++) {
-				body.getPos()[i] += body.getVel()[i] * dt;
+			if(!body.isStarted()) {
+				if(t > body.getStartTime()) {
+					body.setStarted(true);
+					leapfrogFirstStep(dt);
+				}
+			} else {
+				for (int i = 0; i < 3; i++) {
+					body.getPos()[i] += body.getVel()[i] * dt;
+				}
+			}
+		}
+		for (Satellite sat : satellites) {
+			if(!sat.isStarted()) {
+				if(t > sat.getStartTime()) {
+					sat.setStarted(true);
+					leapfrogFirstStep(dt);
+				}
+			} else {
+				for (int i = 0; i < 3; i++) {
+					sat.getPos()[i] += sat.getVel()[i] * dt;
+				}
 			}
 		}
 
 		updateAcceleration();
 
 		for (Body body : bodies) {
+			if(!body.isStarted()) {
+				continue;
+			}
 			for (int i = 0; i < 3; i++) {
 				body.getVel()[i] += body.getAccel()[i] * dt;
+			}
+		}
+		for (Satellite sat : satellites) {
+			if(!sat.isStarted()) {
+				continue;
+			}
+			for (int i = 0; i < 3; i++) {
+				sat.getVel()[i] += sat.getAccel()[i] * dt;
 			}
 		}
 
@@ -94,96 +144,129 @@ public abstract class StarSystem {
 			// set accels to zero again
 			System.arraycopy(new double[3], 0, body.getAccel(), 0, 3);
 		}
+		for (Satellite sat : satellites) {
+			// set accels to zero again
+			System.arraycopy(new double[3], 0, sat.getAccel(), 0, 3);
+		}
 
-		Body star = null;
 		// The star in the system interacts with all io.flightclub.solarsystem.bodies
-		for (Body body : bodies) {
+		// Find the star and set accelerations for all io.flightclub.solarsystem.bodies
+		Body star = bodies.stream().filter(body -> body.isOrbiting(null)).findFirst().get();
 
-			// Find the star and set accelerations for all io.flightclub.solarsystem.bodies
-			if (body.isOrbiting(null)) {
-				star = body;
-				for (Body child : bodies) {
+		bodies.stream().filter(child -> !child.equals(star)).forEach(child -> {
 
-					if (star.equals(child)) {
-						continue;
-					}
+			double Rx = child.getPos()[0] - star.getPos()[0];
+			double Ry = child.getPos()[1] - star.getPos()[1];
+			double Rz = child.getPos()[2] - star.getPos()[2];
+			double R_sq = (Rx * Rx) + (Ry * Ry) + (Rz * Rz);
 
-					double Rx = child.getPos()[0] - star.getPos()[0];
-					double Ry = child.getPos()[1] - star.getPos()[1];
-					double Rz = child.getPos()[2] - star.getPos()[2];
-					double R_sq = (Rx * Rx) + (Ry * Ry) + (Rz * Rz);
+			double psi = atan2(Rz, Rx);
+			double theta = acos(Ry / sqrt(R_sq));
 
-					double psi = atan2(Rz, Rx);
-					double theta = acos(Ry / sqrt(R_sq));
+			double A = G * child.getMass() / R_sq;
 
-					double A = G * child.getMass() / R_sq;
+			star.getAccel()[0] += A * sin(theta) * cos(psi);
+			star.getAccel()[1] += A * cos(theta);
+			star.getAccel()[2] += A * sin(theta) * sin(psi);
 
-					star.getAccel()[0] += A * sin(theta) * cos(psi);
-					star.getAccel()[1] += A * cos(theta);
-					star.getAccel()[2] += A * sin(theta) * sin(psi);
+			A *= star.getMass() / child.getMass();
 
-					A *= star.getMass() / child.getMass();
+			child.getAccel()[0] -= A * sin(theta) * cos(psi);
+			child.getAccel()[1] -= A * cos(theta);
+			child.getAccel()[2] -= A * sin(theta) * sin(psi);
 
-					child.getAccel()[0] -= A * sin(theta) * cos(psi);
-					child.getAccel()[1] -= A * cos(theta);
-					child.getAccel()[2] -= A * sin(theta) * sin(psi);
-				}
-				break;
+			// All other io.flightclub.solarsystem.bodies only interact with their parent.
+			// If their parent is the star, this has already been done
+			if(!child.isOrbiting(star)) {
+
+				Body parent = child.getParent();
+
+				Rx = parent.getPos()[0] - child.getPos()[0];
+				Ry = parent.getPos()[1] - child.getPos()[1];
+				Rz = parent.getPos()[2] - child.getPos()[2];
+				R_sq = (Rx * Rx) + (Ry * Ry) + (Rz * Rz);
+
+				psi = atan2(Rz, Rx);
+				theta = acos(Ry / sqrt(R_sq));
+
+				A = G * parent.getMass() / R_sq;
+
+				child.getAccel()[0] += A * sin(theta) * cos(psi);
+				child.getAccel()[1] += A * cos(theta);
+				child.getAccel()[2] += A * sin(theta) * sin(psi);
+
+				A *= child.getMass() / parent.getMass();
+
+				parent.getAccel()[0] -= A * sin(theta) * cos(psi);
+				parent.getAccel()[1] -= A * cos(theta);
+				parent.getAccel()[2] -= A * sin(theta) * sin(psi);
 			}
 
-		}
-		// All other io.flightclub.solarsystem.bodies only interact with their parent.
-		// If their parent is the star, this has already been done
-		for (Body body : bodies) {
+		});
 
-			if (!body.equals(star) && !body.isOrbiting(star)) {
+		// Satellites don't affect the star
+		satellites.forEach(sat -> {
 
-				Body otherBody = body.getParent();
-
-				double Rx = otherBody.getPos()[0] - body.getPos()[0];
-				double Ry = otherBody.getPos()[1] - body.getPos()[1];
-				double Rz = otherBody.getPos()[2] - body.getPos()[2];
-				double R_sq = (Rx * Rx) + (Ry * Ry) + (Rz * Rz);
-
-				double psi = atan2(Rz, Rx);
-				double theta = acos(Ry / sqrt(R_sq));
-
-				double A = G * otherBody.getMass() / R_sq;
-
-				body.getAccel()[0] += A * sin(theta) * cos(psi);
-				body.getAccel()[1] += A * cos(theta);
-				body.getAccel()[2] += A * sin(theta) * sin(psi);
-
-				A *= body.getMass() / otherBody.getMass();
-
-				otherBody.getAccel()[0] -= A * sin(theta) * cos(psi);
-				otherBody.getAccel()[1] -= A * cos(theta);
-				otherBody.getAccel()[2] -= A * sin(theta) * sin(psi);
-
+			if(!sat.isStarted()) {
+				return;
 			}
-		}
+
+			double Rx = sat.getPos()[0] - star.getPos()[0];
+			double Ry = sat.getPos()[1] - star.getPos()[1];
+			double Rz = sat.getPos()[2] - star.getPos()[2];
+			double R_sq = (Rx * Rx) + (Ry * Ry) + (Rz * Rz);
+
+			double psi = atan2(Rz, Rx);
+			double theta = acos(Ry / sqrt(R_sq));
+
+			double A = G * star.getMass() / R_sq;
+
+			sat.getAccel()[0] -= A * sin(theta) * cos(psi);
+			sat.getAccel()[1] -= A * cos(theta);
+			sat.getAccel()[2] -= A * sin(theta) * sin(psi);
+
+			if(!sat.isOrbiting(star)) {
+				Body parent = sat.getParent();
+
+				Rx = parent.getPos()[0] - sat.getPos()[0];
+				Ry = parent.getPos()[1] - sat.getPos()[1];
+				Rz = parent.getPos()[2] - sat.getPos()[2];
+				R_sq = (Rx * Rx) + (Ry * Ry) + (Rz * Rz);
+
+				psi = atan2(Rz, Rx);
+				theta = acos(Ry / sqrt(R_sq));
+
+				A = G * parent.getMass() / R_sq;
+
+				sat.getAccel()[0] += A * sin(theta) * cos(psi);
+				sat.getAccel()[1] += A * cos(theta);
+				sat.getAccel()[2] += A * sin(theta) * sin(psi);
+			}
+
+		});
+
 	}
 
 	// draws positions (or trajectories when continuous)
 	public void output(double t) {
+		bodies.forEach(body -> outputToFile(body, t));
+		satellites.forEach(sat -> outputToFile(sat, t));
+	}
 
-		for (Body body : bodies) {
+	private void outputToFile(OrbitingObject obj, double t) {
 
-			PrintWriter pw = null;
-			try {
-				File outputFile = new File("output/" + body.getName() + ".dat");
-				pw = new PrintWriter(new FileWriter(outputFile, true));
-				pw.printf("%9.3f\t%9.3f\t%9.3f\t%9.3f\n", t, body.getPos()[0], body.getPos()[1], body.getPos()[2]);
-
-			} catch (IOException e) {
-				System.err.println(e.getMessage());
-			} finally {
-				if (pw != null) {
-					pw.close();
-				}
-			}
-
+		if(!obj.isStarted()) {
+			return;
 		}
+
+		File outputFile = new File("output/" + obj.getName() + ".csv");
+
+		try (PrintWriter pw = new PrintWriter(new FileWriter(outputFile, true))) {
+			pw.printf("%.0f,%.0f,%.0f,%.0f\n", t, obj.getPos()[0], obj.getPos()[1], obj.getPos()[2]);
+		} catch (IOException e) {
+			System.err.println(Resources.getStackTrace(e));
+		}
+
 	}
 
 }

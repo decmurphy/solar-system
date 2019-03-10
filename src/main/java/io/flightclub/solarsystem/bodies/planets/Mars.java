@@ -31,18 +31,13 @@ public final class Mars extends Body {
 	private static final Body SINGLETON = new Mars(3389500, 6.4171e23, getSeconds(0, 24, 37, 0));
 
 	private Mars(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Mars", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(206.7e9, 249.2e9);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Mars";
 	}
 
 	@Override

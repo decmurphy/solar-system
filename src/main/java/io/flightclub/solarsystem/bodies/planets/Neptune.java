@@ -31,18 +31,13 @@ public final class Neptune extends Body {
 	private static final Body SINGLETON = new Neptune(24622, 1.0243e26, getSeconds(0, 16, 11, 0));
 
 	private Neptune(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Neptune", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(4460e9, 4540e9);
 	}
 
 	public static Body get() {
 		return SINGLETON;
-	}
-
-	@Override
-	public String getName() {
-		return "Neptune";
 	}
 
 	@Override

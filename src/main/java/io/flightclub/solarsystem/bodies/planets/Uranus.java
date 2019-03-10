@@ -31,7 +31,7 @@ public final class Uranus extends Body {
 	private static final Body SINGLETON = new Uranus(25362000, 8.681e25, getSeconds(0, 16.8, 0, 0));
 
 	private Uranus(double radius, double mass, long period) {
-		super(radius, mass, period);
+		super("Uranus", radius, mass, period);
 		setOrbiting(Sun.get());
 		setOrbit(2742e9, 3008e9);
 	}
@@ -40,10 +40,6 @@ public final class Uranus extends Body {
 		return SINGLETON;
 	}
 
-	@Override
-	public String getName() {
-		return "Uranus";
-	}
 
 	@Override
 	public double[] getRGB() {

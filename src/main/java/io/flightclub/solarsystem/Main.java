@@ -20,6 +20,7 @@ package io.flightclub.solarsystem;
 
 import io.flightclub.solarsystem.starsystem.Sol;
 import io.flightclub.solarsystem.starsystem.StarSystem;
+import io.flightclub.solarsystem.utils.Resources;
 
 import java.util.Calendar;
 
@@ -48,10 +49,9 @@ public class Main {
 		long secondsEnd = millisEnd / 1000;
 
 		long t = secondsStart;
-		sol.leapfrogFirstStep(dt);
 		do {
 
-			sol.leapfrog(dt);
+			sol.leapfrog(t, dt);
 			if (t > secondsStart && t % (getSeconds(outputDay, outputHour, outputMin, outputSec)) == 0) {
 				sol.output(t);
 			}
@@ -75,19 +75,20 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		int year = 1970;
+		int year = 2018;
 		if (args.length > 0)
 			year = Integer.parseInt(args[0]);
 
 		Calendar start = Calendar.getInstance();
 		Calendar end = Calendar.getInstance();
-		start.set(year, 0, 1, 0, 0, 0);
+		start.set(2018, 0, 1, 0, 0, 0);
 		end.set(year + 1, 0, 1, 0, 0, 0);
 
 		try {
-			getSystemState(Sol.get(), start.getTimeInMillis(), end.getTimeInMillis());
+			getSystemState(Sol.get(), start.getTimeInMillis(), end.getTimeInMillis(), 60, 0, 1, 0, 0);
 		} catch (Exception e) {
 			System.out.println(e);
+			System.out.println(Resources.getStackTrace(e));
 			System.exit(-1);
 		}
 	}
